@@ -1,3 +1,4 @@
+// TODO: CHANGE CONNECTION TO MONGOSE INSTEAD OF SEQUELIZE
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
