@@ -1,22 +1,8 @@
-// TODO: CHANGE CONNECTION TO MONGOSE INSTEAD OF SEQUELIZE
-const Sequelize = require('sequelize');
-require('dotenv').config();
+// TODO: CHECK THE CONNECTION IS CORRECT COMPARE TO MINI PROJECT IN noSQL 
+const mongoose = require('mongoose');
 
-let sequelize;
+// Wrap Mongoose around local connection to MongoDB
+mongoose.connect('mongodb+srv://admin:Password123!@cluster0.53nmbtc.mongodb.net/?retryWrites=true&w=majority');
 
-if (process.env.JAWSDB_URL) {
-  sequelize = new Sequelize(process.env.JAWSDB_URL);
-} else {
-  sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-      host: 'localhost',
-      dialect: 'mysql',
-      port: 3306
-    }
-  );
-}
-
-module.exports = sequelize;
+// Export connection
+module.exports = mongoose.connection; 
