@@ -36,7 +36,7 @@ const userSchema = new Schema({
 // this virtual getter is using this userSchema and named it 'friendCount' the .get function
 // is returning the number of friends by using this.friends.length
 // TODO:FIND INFO ON THIS
-userSchema.virtual('friendCount').get(function() {
+userSchema.virtual("friendCount").get(function () {
   return this.friends.length;
 });
 
