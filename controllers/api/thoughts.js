@@ -80,4 +80,38 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// TODO: POST to create a reaction stored in a single thought's reactions array field
+router.put('/:id', async (req, res) => {
+  const ThoughtData = await Thought.update(req.body, {
+    where: {
+      id: req.params.id,
+      user_id: req.session.user_id,
+    },
+  });
+
+  return res.json(ThoughtData);
+});
+
+// TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
+router.delete('/:id', async (req, res) => {
+  try {
+    const ThoughtData = await Though.destroy({
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
+    });
+
+    if (!ThoughtData) {
+      res.status(404).json({ message: 'No thought found with this id!' });
+      return;
+    }
+
+    res.status(200).json(ThoughtData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
