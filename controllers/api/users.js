@@ -32,6 +32,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const newUser = await User.create({
+// TODO: CHANGE TO SHOW USERNAME AND EMAIL?
       ...req.body,
       user_id: req.session.user_id,
     });
@@ -72,6 +73,42 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json(UserData);
   } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+// TODO: POST to add a new friend to a user's friend list
+// TODO: ADD ERROR CATCH AND CONSOLE
+router.put('/:id', async (req, res) => {
+  const UserData = await User.update(req.body, {
+    where: {
+      id: req.params.id,
+      user_id: req.session.user_id,
+    },
+  });
+
+  return res.json(UserData);
+});
+
+// TODO: DELETE to remove a friend from a user's friend list
+router.delete('/:id', async (req, res) => {
+  try {
+    const UserData = await User.destroy({
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
+    });
+
+    if (!UserData) {
+      res.status(404).json({ message: 'No User found with this id!' });
+      return;
+    }
+
+    res.status(200).json(UserData);
+  } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
