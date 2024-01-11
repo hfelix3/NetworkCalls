@@ -7,6 +7,7 @@ router.get('/', async (req, res) => {
       const ThoughtData = await thought.findAll();
       res.json(ThoughtData);
     } catch (err) {
+      console.log(err);
         res.status(500).json(err);
     }
   });
@@ -39,6 +40,7 @@ router.post('/', async (req, res) => {
   
       res.status(200).json(newThought);
     } catch (err) {
+      console.log(err);
       res.status(400).json(err);
     }
   });
@@ -77,6 +79,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json(ThoughtData);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
