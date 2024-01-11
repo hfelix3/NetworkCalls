@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
   username: {
@@ -17,17 +17,17 @@ const userSchema = new Schema({
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailRegex.test(value);
       },
-      message: "Invalid email format",
+      message: 'Invalid email format',
     },
   },
   thoughts: {
     type: Schema.Types.ObjectId,
-    ref: "thought",
+    ref: 'thought',
     // TODO: Array of _id values referencing the Thought model
   },
   friends: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     // TODO: Array of _id values referencing the User model (self-reference)
   },
 });
@@ -36,7 +36,7 @@ const userSchema = new Schema({
 // this virtual getter is using this userSchema and named it 'friendCount' the .get function
 // is returning the number of friends by using this.friends.length
 // TODO:FIND INFO ON THIS
-userSchema.virtual("friendCount").get(function () {
+userSchema.virtual('friendCount').get(function () {
   return this.friends.length;
 });
 
