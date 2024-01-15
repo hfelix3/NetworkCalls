@@ -76,7 +76,7 @@ To contribute to the project, fork the repository and add your changes.
 
 When your changes are ready to be incorporated, create a pull request into the main branch of the source repository.
 
-Your changes will be review and approve is appropriate. 
+Your changes will be reviewed and approved as appropriate. 
 
 ## Testing
 
