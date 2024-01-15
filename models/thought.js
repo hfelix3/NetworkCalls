@@ -13,8 +13,8 @@ const thoughtSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    // TODO:USE GETTER METHOD FOR TIME STAMP
-    // ?IS THIS CORRECT?
+    // TODO:MAKE SURE THIS DEFAULT IS CORRECT.
+    default: Date.now,
     get: function () {
       return Date.now();
     },
@@ -23,10 +23,15 @@ const thoughtSchema = new Schema({
     type: String,
     required: true,
   },
-  //TODO: Array of nested documents created with the reactionSchema
-  // ?IS THIS CORRECT?
   reactions: [reactionSchema],
-});
+},
+{
+  toJSON: {
+    getters: true,
+  },
+  id: false,
+}
+);
 
 // REACTIONS COUNTER
 thoughtSchema.virtual('reactionCount').get(function () {

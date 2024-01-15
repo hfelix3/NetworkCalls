@@ -20,6 +20,13 @@ const reactionSchema = new Schema({
       return Date.now();
     },
   },
-});
+},
+{
+  toJSON: {
+    getters: true,
+  },
+  id: false,
+}
+);
 
 module.exports = reactionSchema;

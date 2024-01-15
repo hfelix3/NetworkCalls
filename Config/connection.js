@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const { connect, connection } = require('mongoose');
 
-// Wrap Mongoose around local connection to MongoDB
-// TODO: CHECK THE CONNECTION IS CORRECT COMPARE TO MINI PROJECT IN noSQL
-mongoose.connect(
-  'mongodb+srv://admin:Password123!@cluster0.53nmbtc.mongodb.net/?retryWrites=true&w=majority',
-);
+//? The acceptance criteria does not say I need to deploy to heroku. Do I need to? and where is connection being exported to or required. 
 
-// Export connection
-module.exports = mongoose.connection;
+const connectionString =
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studentsDB';
+
+connect(connectionString);
+
+module.exports = connection;
