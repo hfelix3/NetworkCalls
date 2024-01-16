@@ -1,117 +1,116 @@
-const router = require('express').Router();
-const { Thought } = require('../models');
+const { User, Thought } = require('../models');
 
+module.exports = {
 //GET to get all thoughts
-router.get('/', async (req, res) => {
+async getThoughts(req, res) {
   try {
-    const ThoughtData = await thought.findAll();
-    res.json(ThoughtData);
+    const Thoughts = await Thought.find();
+    res.json(Thoughts);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
-});
+},
 
 //GET to get a single thought by its _id
-router.get('/:id', async (req, res) => {
+async getSingleThought(req, res) {
   try {
-    const ThoughtData = await Tag.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const Thought = await Thought.findOne({ _id: req.params.courseId })
+      .select('-__v');
 
-    res.status(200).json(ThoughtData);
-  } catch (error) {
-    console.error('Error fetching Comment:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    if (!Thought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+
+    res.json(Thought);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
-});
+},
 
 //POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
-// ?NOT SURE HOW TO DO THIS ONE
-router.post('/', async (req, res) => {
+async createThought(req, res) {
   try {
-    const newThought = await Thought.create({
-      ...req.body,
-      user_id: req.session.user_id,
-    });
-
-    res.status(200).json(newThought);
+    const Thought = await Thought.create(req.body);
+    res.json(Thought);
   } catch (err) {
     console.log(err);
-    res.status(400).json(err);
+    return res.status(500).json(err);
   }
-});
+},
 
 //PUT to update a thought by its _id
-// ? DO I NEED TO CHANGE THE USER ID TO THOUGHT ID?
-router.put('/:id', async (req, res) => {
-  const ThoughtData = await Thought.update(req.body, {
-    where: {
-      id: req.params.id,
-      user_id: req.session.user_id,
-    },
-  });
+async updateThought(req, res) {
+  try {
+    const Thought = await Thought.findOneAndUpdate(
+      { _id: req.params.ThoughtId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    );
 
-  return res.json(ThoughtData);
-});
+    if (!Thought) {
+      console.log(err);
+      res.status(404).json({ message: 'No thought with this id!' });
+    }
+
+    res.json(Thought);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+},
 
 //DELETE to remove a thought by its _id
-// ?DOES THIS ONE ALSO NEED TO CHANGE
-router.delete('/:id', async (req, res) => {
+async deleteThought(req, res) {
   try {
-    const ThoughtData = await Though.destroy({
-      where: {
-        id: req.params.id,
-        user_id: req.session.user_id,
-      },
-    });
+    const Thought = await Thought.findOneAndDelete({ _id: req.params.ThoughtId });
 
-    if (!ThoughtData) {
-      res.status(404).json({ message: 'No thought found with this id!' });
-      return;
+    if (!Thought) {
+      console.log(err);
+      res.status(404).json({ message: 'No thought with that ID' });
     }
 
-    res.status(200).json(ThoughtData);
+    await User.deleteMany({ _id: { $in: course.Users } });
+    res.json({ message: 'thought and users deleted!' });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
-});
+},
 
-// TODO: POST to create a reaction stored in a single thought's reactions array field
-router.put('/:id', async (req, res) => {
-  const ThoughtData = await Thought.update(req.body, {
-    where: {
-      id: req.params.id,
-      user_id: req.session.user_id,
-    },
-  });
+// // TODO: POST to create a reaction stored in a single thought's reactions array field
+// router.put('/:id', async (req, res) => {
+//   const ThoughtData = await Thought.update(req.body, {
+//     where: {
+//       id: req.params.id,
+//       user_id: req.session.user_id,
+//     },
+//   });
 
-  return res.json(ThoughtData);
-});
+//   return res.json(ThoughtData);
+// }),
 
-// TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
-router.delete('/:id', async (req, res) => {
-  try {
-    const ThoughtData = await Though.destroy({
-      where: {
-        id: req.params.id,
-        user_id: req.session.user_id,
-      },
-    });
+// // TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
+// router.delete('/:id', async (req, res) => {
+//   try {
+//     const ThoughtData = await Thought.destroy({
+//       where: {
+//         id: req.params.id,
+//         user_id: req.session.user_id,
+//       },
+//     });
 
-    if (!ThoughtData) {
-      res.status(404).json({ message: 'No thought found with this id!' });
-      return;
-    }
+//     if (!ThoughtData) {
+//       res.status(404).json({ message: 'No thought found with this id!' });
+//       return;
+//     }
 
-    res.status(200).json(ThoughtData);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+//     res.status(200).json(ThoughtData);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// }),
 
-module.exports = router;
+};
