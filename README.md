@@ -37,7 +37,7 @@ NetworkCalls; On this task I built an API for a social network web application w
 
 ## Installation
 
-To install and test copy and paste the following into terminal:
+To install and test, copy and paste the following into terminal:
 
 ```Bash
 git clone git@github.com:hfelix3/NetworkCalls.git
@@ -86,7 +86,7 @@ Your changes will be reviewed and approved as appropriate.
 
 ### [Github Profile](https://github.com/hfelix3/networkcalls/)
 
-### [walkthrough video]()
+### [Walkthrough video]()
 
 # MIT License
 
