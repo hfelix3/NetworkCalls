@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
-  name: {
+const UserSchema = new Schema({
+  username: {
     type: String,
     unique: true,
     required: true,
@@ -22,13 +22,13 @@ const userSchema = new Schema({
   },
   thoughts: {
     type: Schema.Types.ObjectId,
-    ref: 'thought',
+    ref: 'Thought',
     // TODO: Array of _id values referencing the Thought model
     // get explanation on how these are working
   },
   friends: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'User',
     // TODO: Array of _id values referencing the User model (self-reference)
   },
 },
@@ -43,9 +43,9 @@ const userSchema = new Schema({
 // FRIEND COUNTER:
 // this virtual getter is using this userSchema and named it 'friendCount' the .get function
 // is returning the number of friends by using this.friends.length
-userSchema.virtual('friendCount').get(function () {
-  return this.friends.length;
-});
+// UserSchema.virtual('friendCount').get(function () {
+//   return this.friends.length;
+// });
 
-const user = model('user', userSchema);
-module.exports = user;
+const User = model('User', UserSchema);
+module.exports = User;

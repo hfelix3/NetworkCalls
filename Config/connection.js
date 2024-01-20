@@ -1,9 +1,7 @@
 const { connect, connection } = require('mongoose');
 
-//? The acceptance criteria does not say I need to deploy to heroku. Do I need to? and where is connection being exported to or required. 
-
 const connectionString =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studentsDB';
+  process.env.MONGODB_URI || 'mongodb+srv://HECTOR3:Canela123!3@cluster0.fqmol1x.mongodb.net/';
 
 connect(connectionString);
 

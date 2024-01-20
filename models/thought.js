@@ -1,10 +1,9 @@
 const { Schema, model } = require('mongoose');
-// line 3 appeared when I typed thought on line 29.
-const { thought } = require('.');
-const reactionSchema = require('./reaction');
+const Reaction = require('./Reaction');
 
 // Schema to create thought model
-const thoughtSchema = new Schema({
+const ThoughtSchema = new Schema(
+  {
   thoughtText: {
     type: String,
     required: true,
@@ -23,19 +22,21 @@ const thoughtSchema = new Schema({
     type: String,
     required: true,
   },
-  reactions: [reactionSchema],
+  reactions: [ReactionSchema],
 },
 {
   toJSON: {
     getters: true,
+    virtuals: true,
   },
   id: false,
 }
 );
 
 // REACTIONS COUNTER
-thoughtSchema.virtual('reactionCount').get(function () {
+ThoughtSchema.virtual('ReactionCount').get(function () {
   return this.reactions.length;
 });
 
-module.exports = thought;
+const Thought = model('Thought', ThoughtSchema);
+module.exports = Thought;

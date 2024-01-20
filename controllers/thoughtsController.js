@@ -1,11 +1,12 @@
-const { User, Thought } = require('../models');
+const { ObjectId } = require('mongoose').Types;
+const { User, Thought, Reaction } = require('../models');
 
 module.exports = {
   //GET to get all thoughts
   async getThoughts(req, res) {
     try {
-      const Thoughts = await Thought.find();
-      res.json(Thoughts);
+      const getAllThoughts = await Thought.find({});
+      res.json(getAllThoughts);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -15,15 +16,15 @@ module.exports = {
   //GET to get a single thought by its _id
   async getSingleThought(req, res) {
     try {
-      const Thought = await Thought.findOne({
-        _id: req.params.courseId,
-      }).select('-__v');
+      const getThought = await Thought.findOne({ _id: req.params.courseId })
+      .select('-__v')
+      .populate('thoughts');
 
-      if (!Thought) {
+      if (!getThought) {
         return res.status(404).json({ message: 'No thought with that ID' });
       }
 
-      res.json(Thought);
+      res.json(getThought);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -33,8 +34,8 @@ module.exports = {
   //POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
   async createThought(req, res) {
     try {
-      const Thought = await Thought.create(req.body);
-      res.json(Thought);
+      const newThought = await Thought.create(req.body);
+      res.json(newThought);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -44,18 +45,18 @@ module.exports = {
   //PUT to update a thought by its _id
   async updateThought(req, res) {
     try {
-      const Thought = await Thought.findOneAndUpdate(
+      const ThoughtUpdate = await Thought.findOneAndUpdate(
         { _id: req.params.ThoughtId },
         { $set: req.body },
         { runValidators: true, new: true },
       );
 
-      if (!Thought) {
+      if (!ThoughtUpdate) {
         console.log(err);
         res.status(404).json({ message: 'No thought with this id!' });
       }
 
-      res.json(Thought);
+      res.json(ThoughtUpdate);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -65,11 +66,9 @@ module.exports = {
   //DELETE to remove a thought by its _id
   async deleteThought(req, res) {
     try {
-      const Thought = await Thought.findOneAndDelete({
-        _id: req.params.ThoughtId,
-      });
+      const deleteThought = await Thought.findOneAndDelete({ _id: req.params.ThoughtId });
 
-      if (!Thought) {
+      if (!deleteThought) {
         console.log(err);
         res.status(404).json({ message: 'No thought with that ID' });
       }
@@ -82,25 +81,26 @@ module.exports = {
     }
   },
 
+  // REACTIONS SECTION:
   // TODO: POST to create a reaction stored in a single thought's reactions array field
   async addReaction(req, res) {
     console.log('You are adding a reaction');
     console.log(req.body);
 
     try {
-      const user = await User.findOneAndUpdate(
+      const userReaction = await Thought.findOneAndUpdate(
         { _id: req.params.userId },
         { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true },
       );
 
-      if (!user) {
+      if (!userReaction) {
         return res
           .status(404)
           .json({ message: 'No user found with that ID :(' });
       }
 
-      res.json(user);
+      res.json(userReaction);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -109,19 +109,19 @@ module.exports = {
   // TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
   async removeReaction(req, res) {
     try {
-      const user = await User.findOneAndUpdate(
+      const deleteReaction = await Thought.findOneAndUpdate(
         { _id: req.params.userId },
         { $pull: { Reaction: { reactionId: req.params.reactionId } } },
         { runValidators: true, new: true },
       );
 
-      if (!user) {
+      if (!deleteReaction) {
         return res
           .status(404)
           .json({ message: 'No user found with that ID :(' });
       }
 
-      res.json(user);
+      res.json(deleteReaction);
     } catch (err) {
       res.status(500).json(err);
     }
