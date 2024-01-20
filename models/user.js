@@ -20,17 +20,17 @@ const UserSchema = new Schema({
       message: 'Invalid email format',
     },
   },
-  thoughts: {
+  thoughts: [{
     type: Schema.Types.ObjectId,
     ref: 'Thought',
     // TODO: Array of _id values referencing the Thought model
     // get explanation on how these are working
-  },
-  friends: {
+  }],
+  friends: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
     // TODO: Array of _id values referencing the User model (self-reference)
-  },
+  }],
 },
 {
   toJSON: {

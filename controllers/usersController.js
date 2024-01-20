@@ -36,12 +36,7 @@ async getSingleUser(req, res) {
 async createUser(req, res) {
   try {
     const createUser = await User.create(
-      {
-        username: req.body.username,
-        email: req.body.email,
-        thoughts: req.body.thoughts,
-        friends: req.body.friends
-      },
+      req.body
     );
     res.json(createUser);
   } catch (err) {
