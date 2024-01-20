@@ -86,39 +86,51 @@ async deleteUser(req, res) {
 },
 
 // FRIEND COUNTER SECTION:
-// // TODO: POST to add a new friend to a user's friend list
-// // TODO: ADD ERROR CATCH AND CONSOLE
-// router.put('/:id', async (req, res) => {
-//   const UserData = await User.update(req.body, {
-//     where: {
-//       id: req.params.id,
-//       user_id: req.session.user_id,
-//     },
-//   });
+// TODO: POST to add a new friend to a user's friend list
+// TODO: ADD ERROR CATCH AND CONSOLE
+async addFriend(req, res) {
+  console.log('You are adding a new friend');
+  console.log(req.body);
 
-//   return res.json(UserData);
-// })
+  try {
+    const addAFriend = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.body.friendId || req.body.friendId } },
+      { new: true },
+    );
 
-// // TODO: DELETE to remove a friend from a user's friend list
-// router.delete('/:id', async (req, res) => {
-//   try {
-//     const UserData = await User.destroy({
-//       where: {
-//         id: req.params.id,
-//         user_id: req.session.user_id,
-//       },
-//     });
+    if (!addAFriend) {
+      return res
+        .status(404)
+        .json({ message: 'No user found with that ID :(' });
+    }
 
-//     if (!UserData) {
-//       res.status(404).json({ message: 'No User found with this id!' });
-//       return;
-//     }
+    res.json(addAFriend);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+},
 
-//     res.status(200).json(UserData);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json(err);
-//   }
-// })
+// TODO: DELETE to remove a friend from a user's friend list
+async removeFriend(req, res) {
+  try {
+    // ?CHANGE TO findOneAndDelete()?
+    const deleteFriend = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: params.friendId } },
+      { new: true },
+    );
+
+    if (!deleteFriend) {
+      return res
+        .status(404)
+        .json({ message: 'No user found with that ID :(' });
+    }
+
+    res.json(deleteFriend);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+},
 
 };

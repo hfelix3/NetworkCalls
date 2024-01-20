@@ -109,6 +109,7 @@ module.exports = {
   // TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
   async removeReaction(req, res) {
     try {
+      // ?CHANGE TO findOneAndDelete()?
       const deleteReaction = await Thought.findOneAndUpdate(
         { _id: req.params.userId },
         { $pull: { Reaction: { reactionId: req.params.reactionId } } },

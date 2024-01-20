@@ -43,9 +43,9 @@ const UserSchema = new Schema({
 // FRIEND COUNTER:
 // this virtual getter is using this userSchema and named it 'friendCount' the .get function
 // is returning the number of friends by using this.friends.length
-// UserSchema.virtual('friendCount').get(function () {
-//   return this.friends.length;
-// });
+UserSchema.virtual('friendCount').get(function () {
+  return this.friends.length;
+});
 
 const User = model('User', UserSchema);
 module.exports = User;
