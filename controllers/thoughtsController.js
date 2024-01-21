@@ -16,7 +16,7 @@ module.exports = {
   //GET to get a single thought by its _id
   async getSingleThought(req, res) {
     try {
-      const getThought = await Thought.findOne({ _id: req.params.courseId })
+      const getThought = await Thought.findOne({ _id: req.params.userId })
       .select('-__v')
       .populate('thoughts');
 
@@ -46,7 +46,7 @@ module.exports = {
   async updateThought(req, res) {
     try {
       const ThoughtUpdate = await Thought.findOneAndUpdate(
-        { _id: req.params.ThoughtId },
+        { _id: req.params.thoughtId },
         { $set: req.body },
         { runValidators: true, new: true },
       );
@@ -66,19 +66,18 @@ module.exports = {
   //DELETE to remove a thought by its _id
   async deleteThought(req, res) {
     try {
-      const deleteThought = await Thought.findOneAndDelete({ _id: req.params.ThoughtId });
+      const deleteThought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
       if (!deleteThought) {
         console.log(err);
-        res.status(404).json({ message: 'No thought with that ID' });
+        return res.status(404).json({ message: 'No thought with that ID' });
       }
 
-      await User.deleteMany({ _id: { $in: course.Users } });
-      res.json({ message: 'thought and users deleted!' });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
+      res.json({ message: 'Thought successfully deleted' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
   },
 
   // REACTIONS SECTION:

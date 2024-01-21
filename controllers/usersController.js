@@ -35,12 +35,10 @@ async getSingleUser(req, res) {
 //POST a new user:.
 async createUser(req, res) {
   try {
-    const createUser = await User.create(
-      req.body
-    );
+    const createUser = await User.create(req.body);
     res.json(createUser);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(500).json(err);
   }
 },
