@@ -107,8 +107,7 @@ async addFriend(req, res) {
 // TODO: DELETE to remove a friend from a user's friend list
 async removeFriend(req, res) {
   try {
-    // ?CHANGE TO findOneAndDelete()?
-    const deleteFriend = await User.findOneAndUpdate(
+    const deleteFriend = await User.findOneAndDelete(
       { _id: req.params.userId },
       { $pull: { friends: params.friendId } },
       { new: true },
