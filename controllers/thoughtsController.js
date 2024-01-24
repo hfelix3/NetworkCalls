@@ -17,7 +17,7 @@ module.exports = {
   async getSingleThought(req, res) {
     try {
       const getThought = await Thought.findOne({ _id: req.params.thoughtId })
-
+      
       if (!getThought) {
         return res.status(404).json({ message: 'No thought with that ID' });
       }
@@ -55,7 +55,7 @@ module.exports = {
     try {
       const ThoughtUpdate = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $set: { username: req.body } },
+        { $set: req.body },
         { new: true }
       )
 
@@ -113,13 +113,14 @@ module.exports = {
     }
   },
 
-  // TODO: DELETE to pull and remove a reaction by the reaction's reactionId value
+  // TODO: CHECK ON THIS NOT DELETING REACTION
+  // DELETE to pull and remove a reaction by the reaction's reactionId value
   async removeReaction(req, res) {
     try {
-      const deleteReaction = await Thought.findOneAndDelete(
-        { _id: req.params.reactionId },
-        { $pull: { Reaction: { reactionId: req.params.reactionId } } },
-        { new: true },
+      const deleteReaction = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true },
       );
 
       if (!deleteReaction) {

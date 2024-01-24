@@ -88,7 +88,7 @@ async addFriend(req, res) {
   try {
     const addAFriend = await User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { friends: req.body.friendId || req.body.friendId } },
+      { $addToSet: { friends: req.params.friendId } },
       { new: true },
     );
 
@@ -107,9 +107,9 @@ async addFriend(req, res) {
 // TODO: DELETE to remove a friend from a user's friend list
 async removeFriend(req, res) {
   try {
-    const deleteFriend = await User.findOneAndDelete(
+    const deleteFriend = await User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: params.friendId } },
+      { $pull: { friends: req.params.friendId } },
       { new: true },
     );
 
