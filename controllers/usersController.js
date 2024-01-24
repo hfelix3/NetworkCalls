@@ -48,7 +48,7 @@ async updateUser(req, res) {
   try {
     const userUpdate = await User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $set: { username: req.body.username } },
+      { $set: { username: req.body.username, email: req.body.email } },
       { new: true }
       )
 
